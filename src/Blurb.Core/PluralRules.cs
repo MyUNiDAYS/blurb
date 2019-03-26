@@ -6,6 +6,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Blurb.Core
 {
@@ -14,6 +15,19 @@ namespace Blurb.Core
 	/// </summary>
 	public static class PluralRules
 	{
+		public static Plurality GetPlurality(CultureInfo culture, decimal value)
+		{
+			var isoLanguageName = culture.TwoLetterISOLanguageName;
+
+			PluralRuleDelegate @delegate;
+			if (!IsoLangToDelegate.ContainsKey(isoLanguageName))
+				@delegate = Singular;
+			else
+				@delegate = IsoLangToDelegate[isoLanguageName];
+
+			return (Plurality) @delegate(value, 4);
+		}
+
 		/// <summary>
 		/// Holds the ISO langue code as key, and the <see cref="PluralRuleDelegate"/> with the pluralization rule.
 		/// </summary>

@@ -28,7 +28,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Plurals
 										new CultureInfo("en"),
 										new TermValue
 										{
-											Value = "{days} day", Parameters = new[] {new TermParameter {Name = "days", Type = typeof(object)}}
+											Value = "{0} day", Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal)}}
 										}
 									}
 								}
@@ -44,7 +44,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Plurals
 										new CultureInfo("en"),
 										new TermValue
 										{
-											Value = "{days} days", Parameters = new[] {new TermParameter {Name = "days", Type = typeof(object) } }
+											Value = "{0} days", Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal) } }
 										}
 									}
 								}
@@ -57,11 +57,11 @@ namespace Blurb.Core.Test.Generation.CSharp.Plurals
 
 		public override void Assertions()
 		{
-			var termOne = GetParameterisedTerm("PluralDays", 1);
+			var termOne = GetParameterisedTerm("PluralDays", 1m);
 			termOne.Key.ShouldEqual("Blurb.Core.Test.Generation.CSharp.Plurals.PluralGeneration");
 			termOne.ToString(new CultureInfo("en")).ShouldEqual("1 day");
 
-			var termMany = GetParameterisedTerm("PluralDays", 10);
+			var termMany = GetParameterisedTerm("PluralDays", 10m);
 			termMany.Key.ShouldEqual("Blurb.Core.Test.Generation.CSharp.Plurals.PluralGeneration");
 			termMany.ToString(new CultureInfo("en")).ShouldEqual("10 days");
 		}
