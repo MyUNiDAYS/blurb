@@ -1,0 +1,48 @@
+{
+	"namespace": "Blurb.Core.Tests.Parsing",
+	"class": "Input",
+	"terms": [
+		{
+			"key": "SimpleStatic",
+			"translations": {
+				"en": "I am simple and {{escaped}}",
+				"en-US": "I'm simple and {{escaped}}",
+				"de-DE": "Ich bin einfach und {{escaped}}"
+			}
+		},
+		{
+			"key": "SimpleDynamic",
+			"translations": {
+				"en": "I am {age} and {{escaped}}",
+				"en-US": "I'm {age} and {{escaped}}",
+				"de-DE": "Ich bin {age} und {{escaped}}"
+			}
+		},
+		{
+			"key": "SimpleDynamicFormatted",
+			"translations": {
+				"en": "My birthday is {birthday:dd/MM/yyyy}",
+				"en-US": "My birthday is {birthday:MM/dd/yyyy}",
+				"de-DE": "Mein Geburtstag ist {birthday:dd/MM/yyyy}"
+			}
+		},
+		{
+			"key": "ContentDependent",
+			"translations": {
+				"en": {
+					"AnEnum.Foo": "This is Foo content",
+					"AnEnum.Bar": "This is Bar content"
+				}
+			}
+		},
+		{
+			"key": "Plural",
+			"translations": {
+				"en": {
+					"years.one": "I am {years} year old",
+					"years.many": "I am {years} years old" 
+				} 
+			} 
+		}
+	] 
+}
