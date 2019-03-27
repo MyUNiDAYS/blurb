@@ -5,7 +5,7 @@ using System.Linq;
 namespace Blurb.Core
 {
 	[DebuggerDisplay("Term: {Key}")]
-	public sealed class ParameterisedTerm : Term
+	sealed class ParameterisedTerm : Term
 	{
 		readonly Term term;
 		readonly object[] parameters;

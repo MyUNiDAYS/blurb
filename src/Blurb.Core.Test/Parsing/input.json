@@ -39,8 +39,8 @@
 			"key": "Plural",
 			"translations": {
 				"en": {
-					"years.one": "I am {years} year old",
-					"years.many": "I am {years} years old" 
+					"years.one": "I will be {years} year old on {birthday:dd/MM/yyyy}",
+					"years.other": "I will be {years} years old on {birthday:dd/MM/yyyy}"
 				} 
 			} 
 		}

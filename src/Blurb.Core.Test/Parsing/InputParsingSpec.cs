@@ -25,14 +25,17 @@ namespace Blurb.Core.Test.Parsing
 
 			var termsArray = termCollection.Terms.ToArray();
 
+			// TERM 0
+
 			var terms0 = termsArray[0] as SimpleTermDefinition;
 			terms0.Key.ShouldEqual("SimpleStatic");
 			terms0.Translations[new CultureInfo("en")].Value.ShouldEqual("I am simple");
 			terms0.Translations[new CultureInfo("en-US")].Value.ShouldEqual("I'm simple");
 			terms0.Translations[new CultureInfo("de-DE")].Value.ShouldEqual("Ich bin einfach");
 
-			var terms1 = termsArray[1] as SimpleTermDefinition;
+			// TERM 1
 
+			var terms1 = termsArray[1] as SimpleTermDefinition;
 			terms1.Key.ShouldEqual("SimpleDynamic");
 			var term1En = terms1.Translations[new CultureInfo("en-US")];
 			term1En.Value.ShouldEqual("I am {age}");
@@ -52,6 +55,8 @@ namespace Blurb.Core.Test.Parsing
 			term1DeDe.Parameters[0].Name.ShouldEqual("age");
 			term1DeDe.Parameters[0].Format.ShouldBeNull();
 			term1DeDe.Parameters[0].Type.ShouldEqual(typeof(object));
+
+			// TERM 2
 
 			var terms2 = termsArray[2] as SimpleTermDefinition;
 			terms2.Key.ShouldEqual("SimpleDynamicFormatted");
