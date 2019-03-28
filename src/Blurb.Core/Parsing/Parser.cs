@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
@@ -11,19 +10,21 @@ namespace Blurb.Core.Parsing
 	{
 		public TermCollection Parse(string json)
 		{
-			var root = (JObject)JsonConvert.DeserializeObject(json);
+			var root = (JObject) JsonConvert.DeserializeObject(json);
 
 			var @namespace = (string) root["namespace"];
 			var @class = (string) root["class"];
 
 			var jsonTerms = root["terms"] as JArray;
 
-			foreach (JObject obj in jsonTerms)
-			{
-				ParseTermDefinition(obj);
-			}
+			var termDefinitions = jsonTerms.Select(obj => ParseTermDefinition(obj as JObject)).ToArray();
 
-			return null;
+			return new TermCollection
+			{
+				Namspace = @namespace,
+				ClassName = @class,
+				Terms = termDefinitions
+			};
 		}
 
 		ITermDefinition ParseTermDefinition(JObject obj)
@@ -39,18 +40,47 @@ namespace Blurb.Core.Parsing
 				return new SimpleTermDefinition
 				{
 					Key = key,
-					Translations = jsonLangs.Select(p => new { key = new CultureInfo(p.Name), value = ValueParser.Parse((string) p.Value)}).ToDictionary(x => x.key, x => x.value)
+					Translations = jsonLangs.Select(p => new {key = new CultureInfo(p.Name), value = ValueParser.Parse((string) p.Value)}).ToDictionary(x => x.key, x => x.value)
 				};
 			}
 
 			// complex
-			
+
 			var variations = jsonLangs.SelectMany(p => (p.Value as JObject).Properties()).Select(p => p.Name).Distinct().ToArray();
 
-			variations.Select(v => new SimpleTermDefinition
+			var pluralityNames = Enum.GetNames(typeof(Plurality));
+			var plural = variations
+				.Select(v => v.Substring(v.LastIndexOf('.') + 1))
+				.All(v => pluralityNames.Contains(v, StringComparer.InvariantCultureIgnoreCase));
+
+			if (plural)
 			{
-				Key = key,
-				Translations = jsonLangs.Select(lang => new { key = new CultureInfo(lang.Name), value = ValueParser.Parse((string)(lang.Value as JObject).Property(v).Value) }).ToDictionary(x => x.key, x => x.value)
+				var termDefs = variations.Select(v => new
+				{
+					plurality = (Plurality)Enum.Parse(typeof(Plurality), v.Substring(v.LastIndexOf('.') + 1), true),
+					term = new SimpleTermDefinition
+					{
+						Key = key,
+						Translations = jsonLangs
+							.Select(lang => new
+							{
+								key = new CultureInfo(lang.Name),
+								value = ValueParser.Parse((string) (lang.Value as JObject).Property(v).Value)
+							}).ToDictionary(x => x.key, x => x.value)
+					}
+				}).ToDictionary(x => x.plurality, x => x.term);
+
+				return new PluralTermDefinition
+				{
+					Key = key,
+					Pluralities = termDefs,
+					PluralParameterName = variations.First().Substring(0, variations.First().LastIndexOf('.'))
+				};
+			}
+			else
+			{
+			}
+
 
 			return null;
 		}
