@@ -5,7 +5,7 @@ using System.Globalization;
 namespace Blurb.Core
 {
 	[DebuggerDisplay("Term: {" + nameof(Key) + "}")]
-	sealed class StaticTerm : Term
+	public sealed class StaticTerm : Term
 	{
 		public override string Key { get; }
 		public override string Name { get; }

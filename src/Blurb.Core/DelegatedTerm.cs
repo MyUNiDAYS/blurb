@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Blurb.Core
 {
-	class DelegatedTerm : Term
+	public sealed class DelegatedTerm : Term
 	{
 		readonly Func<CultureInfo, Term> @delegate;
 		public override string Name { get; }

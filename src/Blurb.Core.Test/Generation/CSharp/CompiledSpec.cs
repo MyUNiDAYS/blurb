@@ -19,7 +19,7 @@ namespace Blurb.Core.Test.Generation.CSharp
 			var supportedCultures = new[] {new CultureInfo("en")};
 
 			var simpleTermDefinitionCSharpGenerator = new SimpleTermDefinitionCSharpGenerator(supportedCultures);
-			var generator = new CSharpGenerator(new ITermCSharpGenerator[]{ simpleTermDefinitionCSharpGenerator, new PluralTermDefinitionCSharpGenerator(supportedCultures) });
+			var generator = new CSharpGenerator(new ITermCSharpGenerator[]{ simpleTermDefinitionCSharpGenerator, new PluralTermDefinitionCSharpGenerator(supportedCultures), new ComplexTermDefinitionCSharpGenerator(supportedCultures),  });
 			var generated = generator.Generate(this.Collection);
 
 			assembly = new Compiler().CompileCSharp(@"
