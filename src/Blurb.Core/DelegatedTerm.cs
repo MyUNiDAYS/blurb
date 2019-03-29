@@ -12,7 +12,7 @@ namespace Blurb.Core
 		public DelegatedTerm(string name, string key, Func<CultureInfo, Term> @delegate)
 		{
 			this.Name = name;
-			this.Key = this.Key;
+			this.Key = key;
 			this.@delegate = @delegate;
 		}
 

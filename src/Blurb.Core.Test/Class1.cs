@@ -1,26 +1,31 @@
-﻿//using System.Collections.Generic;
-//using Blurb.Core;
-//
-//namespace Test
-//{
-//	public class TestTerms
-//	{
-//		static readonly Term _PluralDays_Plurality_One = new StaticTerm("ComplexGeneration.ComplexGeneration", "PluralDays.One", new Dictionary<string, string> {{"en", @"{0} day"},});
-//		static readonly Term _PluralDays_Plurality_Many = new StaticTerm("ComplexGeneration.ComplexGeneration", "PluralDays.Many", new Dictionary<string, string> {{"en", @"{0} days"},});
-//
-//		public static Term PluralDays(Blurb.Core.Plurality lol, System.Decimal days)
-//		{
-//			return new ParameterisedTerm(new DelegatedTerm("ComplexGeneration.ComplexGeneration", "PluralDays", culture =>
-//			{
-//				switch (lol)
-//				{
-//					case Plurality.One:
-//						return _PluralDays_Plurality_One;
-//
-//					case Plurality.Many:
-//						return _PluralDays_Plurality_Many;
-//				}
-//			}), lol, days);
-//		}
-//	}
-//}
+﻿
+using System.Collections.Generic;
+using Blurb.Core;
+
+namespace Test
+{
+	public class TestTerms
+	{
+		static readonly Term _ABTest_Blurb_Core_Test_Generation_CSharp_Plurals_ABMode_A = new StaticTerm("ComplexGeneration.ComplexGeneration", "ABTest.A", new Dictionary<string, string> { { "en", @"Copy A {0}" }, });
+		static readonly Term _ABTest_Blurb_Core_Test_Generation_CSharp_Plurals_ABMode_B = new StaticTerm("ComplexGeneration.ComplexGeneration", "ABTest.B", new Dictionary<string, string> { { "en", @"Copy B {0}" }, });
+
+		public static Term ABTest(Blurb.Core.Test.Generation.CSharp.Plurals.ABMode ab, System.Decimal days)
+		{
+			return new ParameterisedTerm(new DelegatedTerm("ComplexGeneration.ComplexGeneration", "ABTest", culture =>
+			{
+				switch (ab)
+				{
+
+					case Blurb.Core.Test.Generation.CSharp.Plurals.ABMode.A:
+						return _ABTest_Blurb_Core_Test_Generation_CSharp_Plurals_ABMode_A;
+
+					case Blurb.Core.Test.Generation.CSharp.Plurals.ABMode.B:
+						return _ABTest_Blurb_Core_Test_Generation_CSharp_Plurals_ABMode_B;
+
+				}
+
+				return new EmptyTerm();
+			}), ab, days);
+		}
+	}
+}

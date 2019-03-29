@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -22,7 +20,8 @@ namespace Blurb.Core.Test.Generation.CSharp
 			var references = new Assembly[]
 				{
 					typeof(object).Assembly,
-					typeof(Blurb.Core.Term).Assembly
+					typeof(Blurb.Core.Term).Assembly, 
+					this.GetType().Assembly
 				}
 				.Select(GetAssemblyPath)
 				.Union(new [] { netstandard, sysRuntime })
