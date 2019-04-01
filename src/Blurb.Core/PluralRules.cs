@@ -1,4 +1,4 @@
-﻿// Taken from https://github.com/axuno/SmartFormat
+﻿// Adapted from https://github.com/axuno/SmartFormat
 // The MIT License(MIT)
 // Copyright 2011-2019 axuno gGmbH, Scott Rippey, Bernhard Millauer and other contributors.
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -25,7 +25,7 @@ namespace Blurb.Core
 			else
 				@delegate = IsoLangToDelegate[isoLanguageName];
 
-			return (Plurality) @delegate(value, 4);
+			return (Plurality) @delegate(value, 2);
 		}
 
 		/// <summary>
@@ -211,125 +211,141 @@ namespace Blurb.Core
 
 		static PluralRuleDelegate DualOneOther => (n, c) =>
 		{
-			if (c == 2) return n == 1 ? 0 : 1;
-			if (c == 3) return n == 0 ? 0 : n == 1 ? 1 : 2;
-			if (c == 4) return n < 0 ? 0 : n == 0 ? 1 : n == 1 ? 2 : 3;
-			return -1;
+			if (c == 2)
+				return n == 1 ? Plurality.One : Plurality.Other;
+
+			if (c == 3)
+				return n == 0 ? Plurality.Zero : 
+					n == 1 ? Plurality.One : 
+					Plurality.Other;
+
+			if (c == 4)
+				return n < 0 ? 0 :
+					n == 0 ? Plurality.Zero : 
+					n == 1 ? Plurality.One : 
+					Plurality.Other;
+
+			return Plurality.Other;
 		}; // Dual: one (n == 1), other
 
 		static PluralRuleDelegate DualWithZero =>
-			(n, c) => n == 0 || n == 1 ? 0 : 1; // DualWithZero: one (n == 0..1), other
+			(n, c) => n == 0 || n == 1 ? Plurality.One : 
+				Plurality.Other; // DualWithZero: one (n == 0..1), other
 
+		/// <summary>
+		/// TODO: this looks bugged? Doesn't do what it says?
+		/// </summary>
 		static PluralRuleDelegate DualFromZeroToTwo =>
-			(n, c) => n == 0 || n == 1 ? 0 : 1; // DualFromZeroToTwo: one (n == 0..2 fractionate and n != 2), other
+			(n, c) => n == 0 || n == 1 ? 0 : 
+				Plurality.Other; // DualFromZeroToTwo: one (n == 0..2 fractionate and n != 2), other
 
 		static PluralRuleDelegate TripleOneTwoOther =>
-			(n, c) => n == 1 ? 0 : n == 2 ? 1 : 2; // Triple: one (n == 1), two (n == 2), other
+			(n, c) => 
+				n == 1 ? Plurality.One : 
+				n == 2 ? Plurality.Two : 
+				Plurality.Other; // Triple: one (n == 1), two (n == 2), other
 
 		static PluralRuleDelegate RussianSerboCroatian => (n, c) =>
-			n % 10 == 1 && n % 100 != 11 ? 0 : // one
-			(n % 10).Between(2, 4) && !(n % 100).Between(12, 14) ? 1 : // few
-			2; // Russian & Serbo-Croatian
+			n % 10 == 1 && n % 100 != 11 ? Plurality.One : // one
+			(n % 10).Between(2, 4) && !(n % 100).Between(12, 14) ? Plurality.Few : // few
+			Plurality.Other; // Russian & Serbo-Croatian
 
 		static PluralRuleDelegate Arabic => (n, c) =>
-			n == 0 ? 0 : // zero
-			n == 1 ? 1 : // one
-			n == 2 ? 2 : // two
-			(n % 100).Between(3, 10) ? 3 : // few
-			(n % 100).Between(11, 99) ? 4 : // many
-			5; // other
+			n == 0 ? Plurality.Zero : // zero
+			n == 1 ? Plurality.One : // one
+			n == 2 ? Plurality.Two : // two
+			(n % 100).Between(3, 10) ? Plurality.Few : // few
+			(n % 100).Between(11, 99) ? Plurality.Many : // many
+			Plurality.Other; // other
 
 		static PluralRuleDelegate Breton => (n, c) =>
-			n == 0 ? 0 : // zero
-			n == 1 ? 1 : // one
-			n == 2 ? 2 : // two
-			n == 3 ? 3 : // few
-			n == 6 ? 4 : // many
-			5; // other
+			n == 0 ? Plurality.Zero : // zero
+			n == 1 ? Plurality.One : // one
+			n == 2 ? Plurality.Two : // two
+			n == 3 ? Plurality.Few : // few
+			n == 6 ? Plurality.Many : // many
+			Plurality.Other; // other
 
 		static PluralRuleDelegate Czech => (n, c) =>
-			n == 1 ? 0 : // one
-			n.Between(2, 4) ? 1 : // few
-			2;
+			n == 1 ? Plurality.One : // one
+			n.Between(2, 4) ? Plurality.Few : // few
+			Plurality.Other;
 
 		static PluralRuleDelegate Welsh => (n, c) =>
-			n == 0 ? 0 : // zero
-			n == 1 ? 1 : // one
-			n == 2 ? 2 : // two
-			n == 3 ? 3 : // few
-			n == 6 ? 4 : // many
-			5;
+			n == 0 ? Plurality.Zero : // zero
+			n == 1 ? Plurality.One : // one
+			n == 2 ? Plurality.Two : // two
+			n == 3 ? Plurality.Few : // few
+			n == 6 ? Plurality.Many : // many
+			Plurality.Other;
 
 		static PluralRuleDelegate Manx => (n, c) =>
 			(n % 10).Between(1, 2) || n % 20 == 0
-				? 0
-				: // one
-				1;
+				? Plurality.One : // one
+				Plurality.Other;
 
 		static PluralRuleDelegate Langi => (n, c) =>
-			n == 0 ? 0 : // zero
-			n > 0 && n < 2 ? 1 : // one
-			2;
+			n == 0 ? Plurality.Zero : // zero
+			n > 0 && n < 2 ? Plurality.One : // one
+			Plurality.Other;
 
 		static PluralRuleDelegate Lithuanian => (n, c) =>
-			n % 10 == 1 && !(n % 100).Between(11, 19) ? 0 : // one
-			(n % 10).Between(2, 9) && !(n % 100).Between(11, 19) ? 1 : // few
-			2;
+			n % 10 == 1 && !(n % 100).Between(11, 19) ? Plurality.One : // one
+			(n % 10).Between(2, 9) && !(n % 100).Between(11, 19) ? Plurality.Few : // few
+			Plurality.Other;
 
 		static PluralRuleDelegate Latvian => (n, c) =>
-			n == 0 ? 0 : // zero
-			n % 10 == 1 && n % 100 != 11 ? 1 :
-			2;
+			n == 0 ? Plurality.Zero : // zero
+			n % 10 == 1 && n % 100 != 11 ? Plurality.One :
+			Plurality.Other;
 
 		static PluralRuleDelegate Macedonian => (n, c) =>
 			n % 10 == 1 && n != 11
-				? 0
-				: // one
-				1;
+				? Plurality.One : // one
+				Plurality.Other;
 
 		static PluralRuleDelegate Moldavian => (n, c) =>
-			n == 1 ? 0 : // one
-			n == 0 || n != 1 && (n % 100).Between(1, 19) ? 1 : // few
-			2;
+			n == 1 ? Plurality.One : // one
+			n == 0 || n != 1 && (n % 100).Between(1, 19) ? Plurality.Few : // few
+			Plurality.Other;
 
 		static PluralRuleDelegate Maltese => (n, c) =>
-			n == 1 ? 0 : // one
-			n == 0 || (n % 100).Between(2, 10) ? 1 : // few
-			(n % 100).Between(11, 19) ? 2 : // many
-			3;
+			n == 1 ? Plurality.One : // one
+			n == 0 || (n % 100).Between(2, 10) ? Plurality.Few : // few
+			(n % 100).Between(11, 19) ? Plurality.Many : // many
+			Plurality.Other;
 
 		static PluralRuleDelegate Polish => (n, c) =>
-			n == 1 ? 0 : // one
-			(n % 10).Between(2, 4) && !(n % 100).Between(12, 14) ? 1 : // few
-			(n % 10).Between(0, 1) || (n % 10).Between(5, 9) || (n % 100).Between(12, 14) ? 2 : // many
-			3;
+			n == 1 ? Plurality.One : // one
+			(n % 10).Between(2, 4) && !(n % 100).Between(12, 14) ? Plurality.Few : // few
+			(n % 10).Between(0, 1) || (n % 10).Between(5, 9) || (n % 100).Between(12, 14) ? Plurality.Many : // many
+			Plurality.Other;
 
 		static PluralRuleDelegate Romanian => (n, c) =>
-			n == 1 ? 0 : // one
-			n == 0 || (n % 100).Between(1, 19) ? 1 : // few
-			2;
+			n == 1 ? Plurality.One : // one
+			n == 0 || (n % 100).Between(1, 19) ? Plurality.Few : // few
+			Plurality.Other;
 
 		static PluralRuleDelegate Tachelhit => (n, c) =>
-			n >= 0 && n <= 1 ? 0 : // one
-			n.Between(2, 10) ? 1 : // few
-			2;
+			n >= 0 && n <= 1 ? Plurality.One : // one
+			n.Between(2, 10) ? Plurality.Few : // few
+			Plurality.Other;
 
 		static PluralRuleDelegate Slovak => (n, c) =>
-			n == 1 ? 0 : // one
-			n.Between(2, 4) ? 1 : // few
-			2;
+			n == 1 ? Plurality.One : // one
+			n.Between(2, 4) ? Plurality.Few : // few
+			Plurality.Other;
 
 		static PluralRuleDelegate Slovenian => (n, c) =>
-			n % 100 == 1 ? 0 : // one
-			n % 100 == 2 ? 1 : // two
-			(n % 100).Between(3, 4) ? 2 : // few
-			3;
+			n % 100 == 1 ? Plurality.One : // one
+			n % 100 == 2 ? Plurality.Two : // two
+			(n % 100).Between(3, 4) ? Plurality.Few : // few
+			Plurality.Other;
 
 		static PluralRuleDelegate CentralMoroccoTamazight => (n, c) =>
 			n.Between(0, 1) || n.Between(11, 99)
-				? 0
-				: // one
-				1;
+				? Plurality.One : // one
+				Plurality.Other;
 
 		/// <summary>
 		/// This delegate determines which singular or plural word should be chosen for the given quantity.
@@ -338,21 +354,8 @@ namespace Blurb.Core
 		/// <param name="value">The value that is being referenced by the singular or plural words</param>
 		/// <param name="pluralCount"></param>
 		/// <returns>Returns the index of the parameter to be used for pluralization.</returns>
-		public delegate int PluralRuleDelegate(decimal value, int pluralCount);
-
-		/// <summary>Construct a rule set for the language code.</summary>
-		/// <param name="twoLetterISOLanguageName">The language code in two-letter ISO-639 format.</param>
-		/// <remarks>
-		/// The pluralization rules are taken from
-		/// http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
-		/// </remarks>
-		public static PluralRuleDelegate GetPluralRule(string twoLetterISOLanguageName)
-		{
-			return IsoLangToDelegate.ContainsKey(twoLetterISOLanguageName)
-				? IsoLangToDelegate[twoLetterISOLanguageName]
-				: null;
-		}
-
+		public delegate Plurality PluralRuleDelegate(decimal value, int pluralCount);
+		
 		/// <summary>
 		/// Returns True if the value is inclusively between the min and max and has no fraction.
 		/// </summary>

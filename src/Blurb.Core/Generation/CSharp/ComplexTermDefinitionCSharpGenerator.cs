@@ -37,7 +37,7 @@ namespace Blurb.Core.Generation.CSharp
 				}}
 
 				return new EmptyTerm();
-			}}), {string.Join(", ", definition.AllParameters.Select(p => p.Name))});
+			}}), {string.Join(", ", definition.AllParameters.Skip(1).Select(p => p.Name))});
 		}}");
 		}
 	}

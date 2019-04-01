@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Blurb.Core.Parsing;
-using Blurb.Core.Test.Generation.CSharp.Plurals;
 
 namespace Blurb.Core.Test.Generation.CSharp.Complex
 {
@@ -20,7 +19,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Complex
 					Complexities = new Dictionary<string, SimpleTermDefinition>
 					{
 						{
-							"Blurb.Core.Test.Generation.CSharp.Plurals.ABMode.A", new SimpleTermDefinition
+							"Blurb.Core.Test.Generation.CSharp.Complex.ABMode.A", new SimpleTermDefinition
 							{
 								Key = "ABTest.A",
 								Translations = new Dictionary<CultureInfo, TermValue>
@@ -38,7 +37,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Complex
 							}
 						},
 						{
-							"Blurb.Core.Test.Generation.CSharp.Plurals.ABMode.B", new SimpleTermDefinition
+							"Blurb.Core.Test.Generation.CSharp.Complex.ABMode.B", new SimpleTermDefinition
 							{
 								Key = "ABTest.B",
 								Translations = new Dictionary<CultureInfo, TermValue>
@@ -63,11 +62,11 @@ namespace Blurb.Core.Test.Generation.CSharp.Complex
 		public override void Assertions()
 		{
 			var termOne = GetParameterisedTerm("ABTest", ABMode.A, 5m);
-			termOne.Key.ShouldEqual("Blurb.Core.Test.Generation.CSharp.Complex.ComplexGeneration");
+			termOne.Key.ShouldEqual("ABTest");
 			termOne.ToString(new CultureInfo("en")).ShouldEqual("Copy A 5");
 
 			var termMany = GetParameterisedTerm("ABTest", ABMode.B, 6m);
-			termMany.Key.ShouldEqual("Blurb.Core.Test.Generation.CSharp.Complex.ComplexGeneration");
+			termMany.Key.ShouldEqual("ABTest");
 			termMany.ToString(new CultureInfo("en")).ShouldEqual("Copy B 6");
 		}
 	}

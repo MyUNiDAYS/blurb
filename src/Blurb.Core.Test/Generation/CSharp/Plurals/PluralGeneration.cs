@@ -35,9 +35,9 @@ namespace Blurb.Core.Test.Generation.CSharp.Plurals
 							}
 						},
 						{
-							Plurality.Many, new SimpleTermDefinition
+							Plurality.Other, new SimpleTermDefinition
 							{
-								Key = "PluralDays.Many",
+								Key = "PluralDays.Other",
 								Translations = new Dictionary<CultureInfo, TermValue>
 								{
 									{
@@ -58,11 +58,11 @@ namespace Blurb.Core.Test.Generation.CSharp.Plurals
 		public override void Assertions()
 		{
 			var termOne = GetParameterisedTerm("PluralDays", 1m);
-			termOne.Key.ShouldEqual("PluralGeneration");
+			termOne.Key.ShouldEqual("PluralDays");
 			termOne.ToString(new CultureInfo("en")).ShouldEqual("1 day");
 
 			var termMany = GetParameterisedTerm("PluralDays", 10m);
-			termMany.Key.ShouldEqual("PluralGeneration");
+			termMany.Key.ShouldEqual("PluralDays");
 			termMany.ToString(new CultureInfo("en")).ShouldEqual("10 days");
 		}
 	}

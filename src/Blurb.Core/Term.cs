@@ -9,12 +9,12 @@ namespace Blurb.Core
 
 		public override string ToString()
 		{
-			return this.ToString(null);
+			return this.ToString(CultureInfo.CurrentCulture);
 		}
 		
 		public static implicit operator string (Term term)
 		{
-			return term.ToString(null);
+			return term.ToString(CultureInfo.CurrentCulture);
 		}
 	}
 }
