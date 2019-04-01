@@ -16,10 +16,12 @@ namespace Blurb.Core.Test.Generation.CSharp
 		[Fact]
 		public void ShouldCompileProperly()
 		{
-			var supportedCultures = new[] {new CultureInfo("en")};
+			var cultureEn = new CultureInfo("en");
+			var supportedCultures = new[] { cultureEn };
+			var cultureSettings = new CultureSettings { SupportedCultures = supportedCultures, DefaultCulture = cultureEn };
 
-			var simpleTermDefinitionCSharpGenerator = new SimpleTermDefinitionCSharpGenerator(supportedCultures);
-			var generator = new CSharpGenerator(new ITermCSharpGenerator[]{ simpleTermDefinitionCSharpGenerator, new PluralTermDefinitionCSharpGenerator(supportedCultures), new ComplexTermDefinitionCSharpGenerator(supportedCultures),  });
+			var simpleTermDefinitionCSharpGenerator = new SimpleTermDefinitionCSharpGenerator(cultureSettings);
+			var generator = new CSharpGenerator(new ITermCSharpGenerator[]{ simpleTermDefinitionCSharpGenerator, new PluralTermDefinitionCSharpGenerator(cultureSettings), new ComplexTermDefinitionCSharpGenerator(cultureSettings) });
 			var generated = generator.Generate(this.Collection);
 
 			assembly = new Compiler().CompileCSharp(@"

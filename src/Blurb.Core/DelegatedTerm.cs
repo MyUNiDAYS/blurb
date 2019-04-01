@@ -6,12 +6,10 @@ namespace Blurb.Core
 	public sealed class DelegatedTerm : Term
 	{
 		readonly Func<CultureInfo, Term> @delegate;
-		public override string Name { get; }
 		public override string Key { get; }
 
-		public DelegatedTerm(string name, string key, Func<CultureInfo, Term> @delegate)
+		public DelegatedTerm(string key, Func<CultureInfo, Term> @delegate)
 		{
-			this.Name = name;
 			this.Key = key;
 			this.@delegate = @delegate;
 		}

@@ -9,7 +9,6 @@ namespace Blurb.Core
 	{
 		readonly Term term;
 		readonly object[] parameters;
-		public override string Name => this.term.Name;
 		public override string Key => this.term.Key;
 
 		public ParameterisedTerm(Term term, params object[] parameters)

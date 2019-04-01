@@ -2,7 +2,7 @@
 using System.Globalization;
 using Blurb.Core.Parsing;
 
-namespace Blurb.Core.Test.Generation.CSharp
+namespace Blurb.Core.Test.Generation.CSharp.Simple
 {
 	public class SimpleStaticGeneration : CompiledSpec
 	{
@@ -27,7 +27,7 @@ namespace Blurb.Core.Test.Generation.CSharp
 		{
 			var staticTerm = GetStaticTerm("SimpleStatic");
 
-			staticTerm.Key.ShouldEqual("Blurb.Core.Test.Generation.CSharp.SimpleStaticGeneration.SimpleStatic");
+			staticTerm.Key.ShouldEqual("SimpleStatic");
 			staticTerm.ToString(new CultureInfo("en")).ShouldEqual("I am simple");
 		}
 	}

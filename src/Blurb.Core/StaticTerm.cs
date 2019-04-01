@@ -8,14 +8,12 @@ namespace Blurb.Core
 	public sealed class StaticTerm : Term
 	{
 		public override string Key { get; }
-		public override string Name { get; }
 
 		readonly IDictionary<string, string> values;
 		
-		public StaticTerm(string @namespace, string name, IDictionary<string, string> values)
+		public StaticTerm(string key, IDictionary<string, string> values)
 		{
-			this.Key = @namespace + '.' + name;
-			this.Name = name;
+			this.Key = key;
 			this.values = values;
 		}
 		

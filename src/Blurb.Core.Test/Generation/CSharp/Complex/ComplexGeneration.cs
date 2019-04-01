@@ -29,7 +29,9 @@ namespace Blurb.Core.Test.Generation.CSharp.Complex
 										new CultureInfo("en"),
 										new TermValue
 										{
-											Value = "Copy A {0}", Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal)}}
+											OriginalValue = "Copy A {days}",
+											Value = "Copy A {0}",
+											Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal)}}
 										}
 									}
 								}
@@ -45,7 +47,9 @@ namespace Blurb.Core.Test.Generation.CSharp.Complex
 										new CultureInfo("en"),
 										new TermValue
 										{
-											Value = "Copy B {0}", Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal) } }
+											OriginalValue = "Copy B {days}",
+											Value = "Copy B {0}",
+											Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal) } }
 										}
 									}
 								}

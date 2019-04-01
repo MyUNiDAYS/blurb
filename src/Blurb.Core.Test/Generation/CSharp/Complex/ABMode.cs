@@ -1,4 +1,4 @@
-﻿namespace Blurb.Core.Test.Generation.CSharp.Plurals
+﻿namespace Blurb.Core.Test.Generation.CSharp.Complex
 {
 	public enum ABMode
 	{

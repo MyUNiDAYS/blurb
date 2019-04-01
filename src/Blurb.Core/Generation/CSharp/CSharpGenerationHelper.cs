@@ -7,19 +7,32 @@ namespace Blurb.Core.Generation.CSharp
 {
 	static class CSharpGenerationHelper
 	{
-		public static void GenerateTermDeclaration_Property(StringBuilder builder, IEnumerable<CultureInfo> supportedCultures, string fullClassName, SimpleTermDefinition definition, string termKey)
+		public static void GenerateXmlDocComments(StringBuilder builder, CultureSettings settings, SimpleTermDefinition definition)
 		{
+			var defaultCopy = definition.Translations[settings.DefaultCulture];
+			builder.Append("/// ").Append(settings.DefaultCulture.Name).Append(": ").AppendLine(defaultCopy.OriginalValue);
+		}
+
+		public static void GenerateTermDeclaration_Property(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition, string termKey, bool @public = false)
+		{
+			if (@public)
+			{
+				GenerateXmlDocComments(builder, settings, definition);
+				builder.Append("public ");
+			}
+
 			builder.Append($@"static readonly Term {termKey} = ");
-			RenderTermCultureSwitch_CSharp(builder, supportedCultures, fullClassName, definition);
+			RenderTermCultureSwitch_CSharp(builder, settings, fullClassName, definition);
 			builder.AppendLine(";");
 		}
 
-		public static void GenerateTermDeclaration_Method(StringBuilder builder, IEnumerable<CultureInfo> supportedCultures, string fullClassName, SimpleTermDefinition definition)
+		public static void GenerateTermDeclaration_Method(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition)
 		{
-			GenerateTermDeclaration_Property(builder, supportedCultures, fullClassName, definition, "_" + definition.Key);
+			GenerateTermDeclaration_Property(builder, settings, fullClassName, definition, "_" + definition.Key);
+
+			GenerateXmlDocComments(builder, settings, definition);
 
 			builder
-				.AppendLine()
 				.Append($@"public static Term ")
 				.Append(definition.Key)
 				.Append(" (");
@@ -58,13 +71,13 @@ namespace Blurb.Core.Generation.CSharp
 				.AppendLine("}");
 		}
 
-		public static void RenderTermCultureSwitch_CSharp(StringBuilder builder, IEnumerable<CultureInfo> supportedCultures, string fullClassName, SimpleTermDefinition definition)
+		public static void RenderTermCultureSwitch_CSharp(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition)
 		{
-			builder.Append($@"new StaticTerm(""{fullClassName}"", ""{definition.Key}"", new Dictionary<string, string> {{ ");
+			builder.Append($@"new StaticTerm(""{definition.Key}"", new Dictionary<string, string> {{ ");
 
 			var cases = new List<string>();
 
-			foreach (var culture in supportedCultures)
+			foreach (var culture in settings.SupportedCultures)
 			{
 				var termValue = GetTerm(definition, culture);
 

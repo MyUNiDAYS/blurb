@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using Blurb.Core.Parsing;
 
@@ -8,21 +6,20 @@ namespace Blurb.Core.Generation.CSharp
 {
 	sealed class SimpleTermDefinitionCSharpGenerator : BaseTermCSharpGenerator<SimpleTermDefinition>
 	{
-		readonly IEnumerable<CultureInfo> supportedCultures;
+		readonly CultureSettings settings;
 
-		public SimpleTermDefinitionCSharpGenerator(IEnumerable<CultureInfo> supportedCultures)
+		public SimpleTermDefinitionCSharpGenerator(CultureSettings settings)
 		{
-			this.supportedCultures = supportedCultures;
+			this.settings = settings;
 		}
 
 		public override void Generate(StringBuilder builder, string fullClassName, SimpleTermDefinition definition)
 		{
 			if (definition.AllParameters.Any())
-				CSharpGenerationHelper.GenerateTermDeclaration_Method(builder, this.supportedCultures, fullClassName, definition);
+				CSharpGenerationHelper.GenerateTermDeclaration_Method(builder, this.settings, fullClassName, definition);
 			else
 			{
-				builder.Append("public ");
-				CSharpGenerationHelper.GenerateTermDeclaration_Property(builder, this.supportedCultures, fullClassName, definition, definition.Key);
+				CSharpGenerationHelper.GenerateTermDeclaration_Property(builder, this.settings, fullClassName, definition, definition.Key, @public: true);
 			}
 		}
 

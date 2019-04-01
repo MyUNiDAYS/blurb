@@ -4,7 +4,6 @@ namespace Blurb.Core
 {
 	public abstract class Term
 	{
-		public abstract string Name { get; }
 		public abstract string Key { get; }
 		public abstract string ToString(CultureInfo culture);
 

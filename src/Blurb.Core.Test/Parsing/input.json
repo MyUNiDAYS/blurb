@@ -1,5 +1,5 @@
 {
-	"namespace": "Blurb.Core.Tests.Parsing",
+	"namespace": "Blurb.Core.Test.Parsing",
 	"class": "Input",
 	"terms": [
 		{

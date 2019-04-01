@@ -4,13 +4,14 @@ using Blurb.Core.Generation.CSharp;
 using Blurb.Core.Parsing;
 using Xunit;
 
-namespace Blurb.Core.Test.Generation.CSharp
+namespace Blurb.Core.Test.Generation.CSharp.Simple
 {
-	public class SimpleDynamicFormattedGeneration
+	public class SimpleDynamicGeneration
 	{
 		[Fact]
 		public void ShouldGenerateCorrectCSharp()
 		{
+			var cultureEn = new CultureInfo("en");
 			var collection = new TermCollection
 			{
 				Namspace = this.GetType().Namespace,
@@ -19,13 +20,13 @@ namespace Blurb.Core.Test.Generation.CSharp
 				{
 					new SimpleTermDefinition
 					{
-						Key = "SimpleDynamicFormatted",
+						Key = "SimpleDynamic",
 						Translations = new Dictionary<CultureInfo, TermValue>
 						{
 							{
-								new CultureInfo("en"), new TermValue
+								cultureEn, new TermValue
 								{
-									Value = "My birthday is {birthday:dd/MM/yyyy}",
+									Value = "I am {age}",
 									Parameters = new[] {new TermParameter {Name = "age", Type = typeof(int)}}
 								}
 							}
@@ -34,7 +35,9 @@ namespace Blurb.Core.Test.Generation.CSharp
 				}
 			};
 
-			var generator = new CSharpGenerator(new ITermCSharpGenerator[] { new SimpleTermDefinitionCSharpGenerator(new[] { new CultureInfo("en") }) });
+			var supportedCultures = new[] { cultureEn };
+			var cultureSettings = new CultureSettings { SupportedCultures = supportedCultures, DefaultCulture = cultureEn };
+			var generator = new CSharpGenerator(new ITermCSharpGenerator[] { new SimpleTermDefinitionCSharpGenerator(cultureSettings) });
 			var generate = generator.Generate(collection);
 		}
 	}

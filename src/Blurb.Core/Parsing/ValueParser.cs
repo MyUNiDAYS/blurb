@@ -15,7 +15,11 @@ namespace Blurb.Core.Parsing
 			var matches = parameterRegex.Matches(value);
 
 			if (matches.Count == 0)
-				return new TermValue {Value = value};
+				return new TermValue
+				{
+					Value = value,
+					OriginalValue = value
+				};
 
 			var parameters = new TermParameter[matches.Count];
 			for (var i = matches.Count - 1; i >= 0; i--)
@@ -34,6 +38,7 @@ namespace Blurb.Core.Parsing
 
 			return new TermValue
 			{
+				OriginalValue = value,
 				Value = builder.ToString(),
 				Parameters = parameters
 			};

@@ -4,6 +4,7 @@ namespace Blurb.Core.Parsing
 {
 	public class TermValue
 	{
+		public string OriginalValue { get; set; }
 		public string Value { get; set; }
 		public IReadOnlyList<TermParameter> Parameters { get; set; }
 

@@ -58,11 +58,11 @@ namespace Blurb.Core.Test.Generation.CSharp.Plurals
 		public override void Assertions()
 		{
 			var termOne = GetParameterisedTerm("PluralDays", 1m);
-			termOne.Key.ShouldEqual("Blurb.Core.Test.Generation.CSharp.Plurals.PluralGeneration");
+			termOne.Key.ShouldEqual("PluralGeneration");
 			termOne.ToString(new CultureInfo("en")).ShouldEqual("1 day");
 
 			var termMany = GetParameterisedTerm("PluralDays", 10m);
-			termMany.Key.ShouldEqual("Blurb.Core.Test.Generation.CSharp.Plurals.PluralGeneration");
+			termMany.Key.ShouldEqual("PluralGeneration");
 			termMany.ToString(new CultureInfo("en")).ShouldEqual("10 days");
 		}
 	}
