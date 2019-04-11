@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using Blurb.Core.Generation.CSharp;
 using Blurb.Core.Parsing;
@@ -7,7 +6,7 @@ using Xunit;
 
 namespace Blurb.Core.Test.Generation.CSharp.Simple
 {
-	public class SimpleDynamicFormattedGeneration
+    public class SimpleDynamicFormattedGeneration
 	{
 		[Fact]
 		public void ShouldGenerateCorrectCSharp()
@@ -29,7 +28,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Simple
 								{
 									OriginalValue = "My birthday is {birthday:dd/MM/yyyy}",
 									Value = "My birthday is {0:dd/MM/yyyy}",
-									Parameters = new[] {new TermParameter {Name = "birthday", Type = typeof(DateTime)}}
+									Parameters = new[] {new TermParameter {Name = "birthday", Type = "DateTime"}}
 								}
 							}
 						}
@@ -42,11 +41,14 @@ namespace Blurb.Core.Test.Generation.CSharp.Simple
 			var generator = new CSharpGenerator(new ITermCSharpGenerator[] { new SimpleTermDefinitionCSharpGenerator(cultureSettings) });
 			var generated = generator.Generate(collection);
 
-			generated.ShouldEqual(@"static readonly Term _SimpleDynamicFormatted = new StaticTerm(""SimpleDynamicFormatted"", new Dictionary<string, string> { { ""en"", @""My birthday is {0:dd/MM/yyyy}"" }, });
-/// en: My birthday is {birthday:dd/MM/yyyy}
-public static Term SimpleDynamicFormatted (System.DateTime birthday){
-	return new ParameterisedTerm(this._SimpleDynamicFormatted, birthday);
-}
+			generated.ShouldEqual(@"		static readonly Term _SimpleDynamicFormatted = new StaticTerm(""SimpleDynamicFormatted"", new Dictionary<string, string> { { ""en"", @""My birthday is {0:dd/MM/yyyy}"" } });
+		/// <summary>
+		/// en: My birthday is {birthday:dd/MM/yyyy}
+		/// </summary>
+		public static Term SimpleDynamicFormatted (DateTime birthday)
+		{
+			return new ParameterisedTerm(this._SimpleDynamicFormatted, birthday);
+		}
 ");
 		}
 	}

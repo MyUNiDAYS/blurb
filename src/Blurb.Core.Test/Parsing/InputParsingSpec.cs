@@ -47,7 +47,7 @@ namespace Blurb.Core.Test.Parsing
 			term1En.Parameters.Count.ShouldEqual(1);
 			term1En.Parameters[0].Name.ShouldEqual("age");
 			term1En.Parameters[0].Format.ShouldBeNull();
-			term1En.Parameters[0].Type.ShouldEqual(typeof(object));
+			term1En.Parameters[0].Type.ShouldEqual("object");
 
 			var term1EnUs = terms1.Translations[new CultureInfo("en-US")];
 			term1EnUs.OriginalValue.ShouldEqual("I'm {age} and {{escaped}}");
@@ -55,7 +55,7 @@ namespace Blurb.Core.Test.Parsing
 			term1EnUs.Parameters.Count.ShouldEqual(1);
 			term1EnUs.Parameters[0].Name.ShouldEqual("age");
 			term1EnUs.Parameters[0].Format.ShouldBeNull();
-			term1EnUs.Parameters[0].Type.ShouldEqual(typeof(object));
+			term1EnUs.Parameters[0].Type.ShouldEqual("object");
 
 			var term1DeDe = terms1.Translations[new CultureInfo("de-DE")];
 			term1DeDe.OriginalValue.ShouldEqual("Ich bin {age} und {{escaped}}");
@@ -63,7 +63,7 @@ namespace Blurb.Core.Test.Parsing
 			term1DeDe.Parameters.Count.ShouldEqual(1);
 			term1DeDe.Parameters[0].Name.ShouldEqual("age");
 			term1DeDe.Parameters[0].Format.ShouldBeNull();
-			term1DeDe.Parameters[0].Type.ShouldEqual(typeof(object));
+			term1DeDe.Parameters[0].Type.ShouldEqual("object");
 
 			// TERM 2
 
@@ -75,11 +75,27 @@ namespace Blurb.Core.Test.Parsing
 			term2En.Parameters.Count.ShouldEqual(1);
 			term2En.Parameters[0].Name.ShouldEqual("birthday");
 			term2En.Parameters[0].Format.ShouldEqual("dd/MM/yyyy");
-			term2En.Parameters[0].Type.ShouldEqual(typeof(object));
+			term2En.Parameters[0].Type.ShouldEqual("object");
 			terms2.Translations[new CultureInfo("en-US")].OriginalValue.ShouldEqual("My birthday is {birthday:MM/dd/yyyy}");
 			terms2.Translations[new CultureInfo("en-US")].Value.ShouldEqual("My birthday is {0:MM/dd/yyyy}");
 			terms2.Translations[new CultureInfo("de-DE")].OriginalValue.ShouldEqual("Mein Geburtstag ist {birthday:dd/MM/yyyy}");
 			terms2.Translations[new CultureInfo("de-DE")].Value.ShouldEqual("Mein Geburtstag ist {0:dd/MM/yyyy}");
+			
+			// TERM 3
+
+			var terms3 = termsArray[3] as SimpleTermDefinition;
+			terms3.Key.ShouldEqual("SimpleDynamicFormattedWithType");
+			var term3En = terms3.Translations[new CultureInfo("en")];
+			term3En.OriginalValue.ShouldEqual("My birthday is {birthday#DateTime:dd/MM/yyyy}");
+			term3En.Value.ShouldEqual("My birthday is {0:dd/MM/yyyy}");
+			term3En.Parameters.Count.ShouldEqual(1);
+			term3En.Parameters[0].Name.ShouldEqual("birthday");
+			term3En.Parameters[0].Format.ShouldEqual("dd/MM/yyyy");
+			term3En.Parameters[0].Type.ShouldEqual("DateTime");
+			terms3.Translations[new CultureInfo("en-US")].OriginalValue.ShouldEqual("My birthday is {birthday#DateTime:MM/dd/yyyy}");
+			terms3.Translations[new CultureInfo("en-US")].Value.ShouldEqual("My birthday is {0:MM/dd/yyyy}");
+			terms3.Translations[new CultureInfo("de-DE")].OriginalValue.ShouldEqual("Mein Geburtstag ist {birthday#DateTime:dd/MM/yyyy}");
+			terms3.Translations[new CultureInfo("de-DE")].Value.ShouldEqual("Mein Geburtstag ist {0:dd/MM/yyyy}");
 		}
 	}
 }

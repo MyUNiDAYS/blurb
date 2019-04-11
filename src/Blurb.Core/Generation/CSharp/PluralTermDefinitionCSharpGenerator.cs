@@ -62,8 +62,9 @@ namespace Blurb.Core.Generation.CSharp
 			var other = GetTerm(definition, Plurality.Other);
 			CSharpGenerationHelper.GenerateTermDeclaration_Property(builder, this.settings, fullClassName, other, '_' + definition.Key + "_Other");
 						
-			builder.AppendLine($@"
-		public static Term {definition.Key}({string.Join(", ", definition.AllParameters.Select(p => p.Type.Namespace + '.' + p.Type.Name + ' ' + p.Name))})
+			CSharpGenerationHelper.GenerateXmlDocComments(builder, settings, other);
+			
+			builder.AppendLine($@"		public static Term {definition.Key}({string.Join(", ", definition.AllParameters.Select(p => p.Type + ' ' + p.Name))})
 		{{
 			return new ParameterisedTerm(new DelegatedTerm(""{definition.Key}"", culture =>
 			{{

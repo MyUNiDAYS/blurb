@@ -19,7 +19,7 @@ namespace Blurb.Core.Generation.CSharp
 				CSharpGenerationHelper.GenerateTermDeclaration_Property(builder, this.settings, fullClassName, complexity.Value, '_' + definition.Key + '_' + complexity.Key.Replace('.', '_'));
 
 			builder.AppendLine($@"
-		public static Term {definition.Key}({string.Join(", ", definition.AllParameters.Select(p => p.Type.Namespace + '.' + p.Type.Name + ' ' + p.Name))})
+		public static Term {definition.Key}({string.Join(", ", definition.AllParameters.Select(p => p.Type + ' ' + p.Name))})
 		{{
 			return new ParameterisedTerm(new DelegatedTerm(""{definition.Key}"", culture =>
 			{{

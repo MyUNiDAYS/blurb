@@ -15,7 +15,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Complex
 				new ComplexTermDefinition
 				{
 					Key = "ABTest",
-					ComplexParameter = new TermParameter{Name = "ab", Type = typeof(ABMode)},
+					ComplexParameter = new TermParameter{Name = "ab", Type = "Blurb.Core.Test.Generation.CSharp.Complex.ABMode"},
 					Complexities = new Dictionary<string, SimpleTermDefinition>
 					{
 						{
@@ -30,7 +30,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Complex
 										{
 											OriginalValue = "Copy A {days}",
 											Value = "Copy A {0}",
-											Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal)}}
+											Parameters = new[] {new TermParameter {Name = "days", Type = "System.Decimal"}}
 										}
 									}
 								}
@@ -48,7 +48,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Complex
 										{
 											OriginalValue = "Copy B {days}",
 											Value = "Copy B {0}",
-											Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal) } }
+											Parameters = new[] {new TermParameter {Name = "days", Type = "System.Decimal" } }
 										}
 									}
 								}

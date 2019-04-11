@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Temp\Class1.cs" />
-    <Compile Remove="Temp\Class2.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Parsing\input.json" />
   </ItemGroup>
 
@@ -36,10 +31,6 @@
     <Reference Include="Microsoft.CodeAnalysis.CSharp">
       <HintPath>C:\Users\andrew.bullock\.nuget\packages\microsoft.codeanalysis.csharp\2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Temp\" />
   </ItemGroup>
 
 </Project>

@@ -27,7 +27,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Simple
 								cultureEn, new TermValue
 								{
 									Value = "I am {age}",
-									Parameters = new[] {new TermParameter {Name = "age", Type = typeof(int)}}
+									Parameters = new[] {new TermParameter {Name = "age", Type = "int"}}
 								}
 							}
 						}

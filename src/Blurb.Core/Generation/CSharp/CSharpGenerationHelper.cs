@@ -10,11 +10,16 @@ namespace Blurb.Core.Generation.CSharp
 		public static void GenerateXmlDocComments(StringBuilder builder, CultureSettings settings, SimpleTermDefinition definition)
 		{
 			var defaultCopy = definition.Translations[settings.DefaultCulture];
-			builder.Append("/// ").Append(settings.DefaultCulture.Name).Append(": ").AppendLine(defaultCopy.OriginalValue);
+			builder
+				.AppendLine("		/// <summary>")
+				.Append("		/// ").Append(settings.DefaultCulture.Name).Append(": ").AppendLine(defaultCopy.OriginalValue)
+				.AppendLine("		/// </summary>");
 		}
 
 		public static void GenerateTermDeclaration_Property(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition, string termKey, bool @public = false)
 		{
+			builder.Append("		");
+
 			if (@public)
 			{
 				GenerateXmlDocComments(builder, settings, definition);
@@ -33,7 +38,7 @@ namespace Blurb.Core.Generation.CSharp
 			GenerateXmlDocComments(builder, settings, definition);
 
 			builder
-				.Append($@"public static Term ")
+				.Append($@"		public static Term ")
 				.Append(definition.Key)
 				.Append(" (");
 
@@ -41,9 +46,7 @@ namespace Blurb.Core.Generation.CSharp
 			{
 				var parameter = definition.AllParameters[i];
 				builder
-					.Append(parameter.Type.Namespace)
-					.Append('.')
-					.Append(parameter.Type.Name)
+					.Append(parameter.Type)
 					.Append(' ')
 					.Append(parameter.Name);
 
@@ -52,9 +55,9 @@ namespace Blurb.Core.Generation.CSharp
 			}
 
 			builder
-				.Append(")")
-				.AppendLine("{")
-				.Append("	return new ParameterisedTerm(this._")
+				.AppendLine(")")
+				.AppendLine("		{")
+				.Append("			return new ParameterisedTerm(this._")
 				.Append(definition.Key)
 				.Append(", ");
 
@@ -68,7 +71,7 @@ namespace Blurb.Core.Generation.CSharp
 
 			builder
 				.AppendLine(");")
-				.AppendLine("}");
+				.AppendLine("		}");
 		}
 
 		public static void RenderTermCultureSwitch_CSharp(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition)
@@ -77,8 +80,10 @@ namespace Blurb.Core.Generation.CSharp
 
 			var cases = new List<string>();
 
-			foreach (var culture in settings.SupportedCultures)
+			for (var i = 0; i < settings.SupportedCultures.Count; i++)
 			{
+				var culture = settings.SupportedCultures[i];
+
 				var termValue = GetTerm(definition, culture);
 
 				var termText = termValue.Value;
@@ -92,7 +97,10 @@ namespace Blurb.Core.Generation.CSharp
 					.Append(culture.Name.ToLowerInvariant())
 					.Append("\", @\"")
 					.Append(termText.Replace("\"", "\"\""))
-					.Append("\" }, ");
+					.Append("\" } ");
+
+				if (i < settings.SupportedCultures.Count - 1)
+					builder.Append(", ");
 			}
 
 			builder.Append("})");

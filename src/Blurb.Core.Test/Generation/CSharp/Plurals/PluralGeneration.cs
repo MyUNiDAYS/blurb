@@ -28,7 +28,9 @@ namespace Blurb.Core.Test.Generation.CSharp.Plurals
 										new CultureInfo("en"),
 										new TermValue
 										{
-											Value = "{0} day", Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal)}}
+											OriginalValue = "{days} day",
+											Value = "{0} day",
+											Parameters = new[] {new TermParameter {Name = "days", Type = "decimal"}}
 										}
 									}
 								}
@@ -44,7 +46,9 @@ namespace Blurb.Core.Test.Generation.CSharp.Plurals
 										new CultureInfo("en"),
 										new TermValue
 										{
-											Value = "{0} days", Parameters = new[] {new TermParameter {Name = "days", Type = typeof(decimal) } }
+											OriginalValue = "{days} days",
+											Value = "{0} days",
+											Parameters = new[] {new TermParameter {Name = "days", Type = "decimal" } }
 										}
 									}
 								}

@@ -20,7 +20,18 @@ namespace Blurb.Core.Test.Parsing
 			termValue.Value.ShouldEqual("I am {0}");
 			termValue.Parameters.Count.ShouldEqual(1);
 			termValue.Parameters[0].Name.ShouldEqual("age");
-			termValue.Parameters[0].Type.ShouldEqual(typeof(object));
+			termValue.Parameters[0].Type.ShouldEqual("object");
+			termValue.Parameters[0].Index.ShouldEqual(0);
+			termValue.Parameters[0].Format.ShouldBeNull();
+		}
+		[Fact]
+		public void ShouldParseSimpleDynamicWithType()
+		{
+			var termValue = ValueParser.Parse("I am {age#int}");
+			termValue.Value.ShouldEqual("I am {0}");
+			termValue.Parameters.Count.ShouldEqual(1);
+			termValue.Parameters[0].Name.ShouldEqual("age");
+			termValue.Parameters[0].Type.ShouldEqual("int");
 			termValue.Parameters[0].Index.ShouldEqual(0);
 			termValue.Parameters[0].Format.ShouldBeNull();
 		}
@@ -32,7 +43,30 @@ namespace Blurb.Core.Test.Parsing
 			termValue.Value.ShouldEqual("My birthday is {0:dd/MM/yyyy}");
 			termValue.Parameters.Count.ShouldEqual(1);
 			termValue.Parameters[0].Name.ShouldEqual("birthday");
-			termValue.Parameters[0].Type.ShouldEqual(typeof(object));
+			termValue.Parameters[0].Type.ShouldEqual("object");
+			termValue.Parameters[0].Index.ShouldEqual(0);
+			termValue.Parameters[0].Format.ShouldEqual("dd/MM/yyyy");
+		}
+
+		[Fact]
+		public void ShouldParseSimpleDynamicFormattedWithType()
+		{
+			var termValue = ValueParser.Parse("My birthday is {birthday#DateTime:dd/MM/yyyy}");
+			termValue.Value.ShouldEqual("My birthday is {0:dd/MM/yyyy}");
+			termValue.Parameters.Count.ShouldEqual(1);
+			termValue.Parameters[0].Name.ShouldEqual("birthday");
+			termValue.Parameters[0].Type.ShouldEqual("DateTime");
+			termValue.Parameters[0].Index.ShouldEqual(0);
+			termValue.Parameters[0].Format.ShouldEqual("dd/MM/yyyy");
+		}
+		[Fact]
+		public void ShouldParseSimpleDynamicTypeWithFormatting()
+		{
+			var termValue = ValueParser.Parse("My birthday is {birthday:dd/MM/yyyy#DateTime}");
+			termValue.Value.ShouldEqual("My birthday is {0:dd/MM/yyyy}");
+			termValue.Parameters.Count.ShouldEqual(1);
+			termValue.Parameters[0].Name.ShouldEqual("birthday");
+			termValue.Parameters[0].Type.ShouldEqual("DateTime");
 			termValue.Parameters[0].Index.ShouldEqual(0);
 			termValue.Parameters[0].Format.ShouldEqual("dd/MM/yyyy");
 		}
