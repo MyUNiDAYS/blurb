@@ -79,6 +79,42 @@ namespace Blurb.Core.Parsing
 			}
 			else
 			{
+				var termDefs = variations.Select(v => new
+				{
+					enumName = v,
+					term = new SimpleTermDefinition
+					{
+						Key = key,
+						Translations = jsonLangs
+							.Select(lang => new
+							{
+								key = new CultureInfo(lang.Name),
+								value = ValueParser.Parse((string)(lang.Value as JObject).Property(v).Value)
+							}).ToDictionary(x => x.key, x => x.value)
+					}
+				}).ToDictionary(x => x.enumName, x => x.term);
+
+				var enumType = variations.First().Substring(0, variations.First().LastIndexOf('.'));
+
+				var lastIndexOf = enumType.LastIndexOf('.');
+				string name;
+				if (lastIndexOf > -1)
+					name = enumType.Substring(0, lastIndexOf);
+				else
+					name = enumType;
+
+				name = char.ToLower(name[0]) + name.Substring(1);
+
+				return new ComplexTermDefinition
+				{
+					Key = key,
+					Complexities = termDefs,
+					ComplexParameter = new TermParameter
+					{
+						Name = name,
+						Type = enumType
+					} 
+				};
 			}
 
 

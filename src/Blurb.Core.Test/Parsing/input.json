@@ -19,22 +19,6 @@
 			}
 		},
 		{
-			"key": "SimpleDynamicFormatted",
-			"translations": {
-				"en": "My birthday is {birthday:dd/MM/yyyy}",
-				"en-US": "My birthday is {birthday:MM/dd/yyyy}",
-				"de-DE": "Mein Geburtstag ist {birthday:dd/MM/yyyy}"
-			}
-		},
-		{
-			"key": "SimpleDynamicFormattedWithType",
-			"translations": {
-				"en": "My birthday is {birthday#DateTime:dd/MM/yyyy}",
-				"en-US": "My birthday is {birthday#DateTime:MM/dd/yyyy}",
-				"de-DE": "Mein Geburtstag ist {birthday#DateTime:dd/MM/yyyy}"
-			}
-		},
-		{
 			"key": "ContentDependent",
 			"translations": {
 				"en": {
