@@ -12,7 +12,7 @@ namespace Blurb.Core.Generation.CSharp
 			var defaultCopy = definition.Translations[settings.DefaultCulture];
 			builder
 				.AppendLine("		/// <summary>")
-				.Append("		/// ").Append(settings.DefaultCulture.Name).Append(": ").AppendLine(defaultCopy.OriginalValue)
+				.Append("		/// ").Append(settings.DefaultCulture.Name).Append(": \"").Append(defaultCopy.OriginalValue).AppendLine("\"")
 				.AppendLine("		/// </summary>");
 		}
 

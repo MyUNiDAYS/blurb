@@ -43,7 +43,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Simple
 
 			generated.ShouldEqual(@"		static readonly Term _SimpleDynamicFormatted = new StaticTerm(""SimpleDynamicFormatted"", new Dictionary<string, string> { { ""en"", @""My birthday is {0:dd/MM/yyyy}"" } });
 		/// <summary>
-		/// en: My birthday is {birthday:dd/MM/yyyy}
+		/// en: ""My birthday is {birthday:dd/MM/yyyy}""
 		/// </summary>
 		public static Term SimpleDynamicFormatted (DateTime birthday)
 		{

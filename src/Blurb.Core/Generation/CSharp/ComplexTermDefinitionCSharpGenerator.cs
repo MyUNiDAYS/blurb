@@ -18,8 +18,15 @@ namespace Blurb.Core.Generation.CSharp
 			foreach (var complexity in definition.Complexities)
 				CSharpGenerationHelper.GenerateTermDeclaration_Property(builder, this.settings, fullClassName, complexity.Value, '_' + definition.Key + '_' + complexity.Key.Replace('.', '_'));
 
-			builder.AppendLine($@"
-		public static Term {definition.Key}({string.Join(", ", definition.AllParameters.Select(p => p.Type + ' ' + p.Name))})
+			builder.AppendLine().AppendLine("		/// <summary>");
+			foreach (var complexity in definition.Complexities)
+			{
+				var defaultCopy = complexity.Value.Translations[this.settings.DefaultCulture];
+				builder.Append("		/// ").Append(this.settings.DefaultCulture.Name).Append(", ").Append(complexity.Key).Append(": \"").Append(defaultCopy.OriginalValue).AppendLine("\"");
+			}
+			builder.AppendLine("		/// </summary>");
+
+			builder.AppendLine($@"		public static Term {definition.Key}({string.Join(", ", definition.AllParameters.Select(p => p.Type + ' ' + p.Name))})
 		{{
 			return new ParameterisedTerm(new DelegatedTerm(""{definition.Key}"", culture =>
 			{{

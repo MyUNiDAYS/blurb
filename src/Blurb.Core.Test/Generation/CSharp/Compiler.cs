@@ -13,6 +13,7 @@ namespace Blurb.Core.Test.Generation.CSharp
 		public Assembly CompileCSharp(string csharp)
 		{
 			var assemblyPath = GetAssemblyPath(typeof(ValueTuple<>).Assembly);
+
 			var directoryName = Path.GetDirectoryName(assemblyPath);
 			var netstandard = Path.Combine(directoryName, "netstandard.dll");
 			var sysRuntime = Path.Combine(directoryName, "System.Runtime.dll");
