@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Blurb.Core.Generation.CSharp;
-using Blurb.Core.Parsing;
 using Xunit;
 
 namespace Blurb.Core.Test.Generation.CSharp.Simple
@@ -12,28 +11,7 @@ namespace Blurb.Core.Test.Generation.CSharp.Simple
 		public void ShouldGenerateCorrectCSharp()
 		{
 			var cultureEn = new CultureInfo("en");
-			var collection = new TermCollection
-			{
-				Namspace = this.GetType().Namespace,
-				ClassName = this.GetType().Name,
-				Terms = new[]
-				{
-					new SimpleTermDefinition
-					{
-						Key = "SimpleDynamic",
-						Translations = new Dictionary<CultureInfo, TermValue>
-						{
-							{
-								cultureEn, new TermValue
-								{
-									Value = "I am {age}",
-									Parameters = new[] {new TermParameter {Name = "age", Type = "int"}}
-								}
-							}
-						}
-					}
-				}
-			};
+			var collection = TestTerms.SimpleDynamic;
 
 			var supportedCultures = new[] { cultureEn };
 			var cultureSettings = new CultureSettings { SupportedCultures = supportedCultures, DefaultCulture = cultureEn };

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Blurb.Core.Test.Parsing
 {
-	public class Term2Complex
+	public class Term3Plural
 	{
 		[Fact]
 		public void ShouldParseInputProperly()
@@ -25,18 +25,14 @@ namespace Blurb.Core.Test.Parsing
 
 			var termsArray = termCollection.Terms.ToArray();
 			
-			// TERM 2
+			// TERM 3
 
-			var term2 = termsArray[2] as ComplexTermDefinition;
-			term2.Key.ShouldEqual("ContentDependent");
+			var term3 = termsArray[3] as PluralTermDefinition;
+			term3.Key.ShouldEqual("Plural");
 			
-			term2.ComplexParameter.Name.ShouldEqual("anEnum");
-			term2.ComplexParameter.Type.ShouldEqual("AnEnum");
-			term2.ComplexParameter.Format.ShouldBeNull();
-			term2.ComplexParameter.Index.ShouldEqual(0);
-
-			term2.Complexities["AnEnum.Foo"].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("This is Foo content");
-			term2.Complexities["AnEnum.Bar"].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("This is Bar content");
+			term3.PluralParameterName.ShouldEqual("years");
+			term3.Pluralities[Plurality.One].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("I will be {years} year old on {birthday:dd/MM/yyyy}");
+			term3.Pluralities[Plurality.Other].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("I will be {years} years old on {birthday:dd/MM/yyyy}");
 		}
 	}
 }
