@@ -1,5 +1,6 @@
 ﻿using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Msie;
+using Newtonsoft.Json;
 using React;
 
 namespace Blurb.Core.Test.Generation.Javascript
@@ -31,8 +32,9 @@ namespace Blurb.Core.Test.Generation.Javascript
 		{
 			if (args != null)
 			{
-				
-				var functionWithArgs = this.javascript + "; testTerms." + key + "('" + string.Join(',', args) + "');";
+				var jsonArray = JsonConvert.SerializeObject(args);
+
+				var functionWithArgs = this.javascript + "; testTerms." + key + ".apply(testTerms, " + jsonArray + ");";
 				return this.reactEnvironment.Execute<string>(functionWithArgs);
 			} 
 

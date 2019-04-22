@@ -16,12 +16,11 @@ namespace Blurb.Core.Test.Generation.Javascript
 			var cultureEn = new CultureInfo("en");
 			var supportedCultures = new[] { cultureEn };
 			var cultureSettings = new CultureSettings { SupportedCultures = supportedCultures, DefaultCulture = cultureEn };
-
-			var simpleTermDefinitionCSharpGenerator = new SimpleTermDefinitionJsGenerator(cultureSettings);
-			var generator = new JsGenerator(new ITermJsGenerator[] { simpleTermDefinitionCSharpGenerator });
+			
+			var generator = new JsGenerator(new ITermJsGenerator[] { new SimpleTermDefinitionJsGenerator(cultureSettings), new ComplexTermDefinitionJsGenerator(cultureSettings),  });
 			var generated = generator.Generate(this.Collection, this.Culture);
 
-			this.jsExecutor = new JsExecutor("var testTerms = new class { " + generated + " }();");
+			this.jsExecutor = new JsExecutor("var testTerms = new class {\n" + generated + "\n}();");
 
 			this.Assertions();
 		}

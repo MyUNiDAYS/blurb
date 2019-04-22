@@ -62,5 +62,58 @@ namespace Blurb.Core.Test.Generation
 				}
 			}
 		};
+
+		public static readonly TermCollection ComplexAB = new TermCollection
+		{
+			Namspace = "Blurb.Core.Test.Generation",
+			ClassName = "TestTerms",
+			Terms = new[]
+			{
+				new ComplexTermDefinition
+				{
+					Key = "ABTest",
+					ComplexParameter = new TermParameter{Name = "ab", Type = "Blurb.Core.Test.Generation.CSharp.Complex.ABMode"},
+					Complexities = new Dictionary<string, SimpleTermDefinition>
+					{
+						{
+							"Blurb.Core.Test.Generation.CSharp.Complex.ABMode.A", new SimpleTermDefinition
+							{
+								Key = "ABTest.A",
+								Translations = new Dictionary<CultureInfo, TermValue>
+								{
+									{
+										new CultureInfo("en"),
+										new TermValue
+										{
+											OriginalValue = "Copy A {days}",
+											Value = "Copy A {0}",
+											Parameters = new[] {new TermParameter {Name = "days", Type = "System.Decimal"}}
+										}
+									}
+								}
+							}
+						},
+						{
+							"Blurb.Core.Test.Generation.CSharp.Complex.ABMode.B", new SimpleTermDefinition
+							{
+								Key = "ABTest.B",
+								Translations = new Dictionary<CultureInfo, TermValue>
+								{
+									{
+										new CultureInfo("en"),
+										new TermValue
+										{
+											OriginalValue = "Copy B {days}",
+											Value = "Copy B {0}",
+											Parameters = new[] {new TermParameter {Name = "days", Type = "System.Decimal" } }
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		};
 	}
 }

@@ -8,15 +8,6 @@ namespace Blurb.Core.Generation.Javascript
 {
 	static class JsGenerationHelper
 	{
-		public static void GenerateXmlDocComments(StringBuilder builder, CultureSettings settings, SimpleTermDefinition definition)
-		{
-//			var defaultCopy = definition.Translations[settings.DefaultCulture];
-//			builder
-//				.AppendLine("		/// <summary>")
-//				.Append("		/// ").Append(settings.DefaultCulture.Name).Append(": \"").Append(defaultCopy.OriginalValue).AppendLine("\"")
-//				.AppendLine("		/// </summary>");
-		}
-
 		public static void GenerateTermDeclaration_Property(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition, string termKey, CultureInfo culture)
 		{
 			builder.AppendLine($@"
@@ -28,10 +19,6 @@ get {termKey}() {{
 
 		public static void GenerateTermDeclaration_Method(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition, CultureInfo culture)
 		{
-			//GenerateTermDeclaration_Property(builder, settings, fullClassName, definition, "_" + definition.Key, culture);
-
-			//GenerateXmlDocComments(builder, settings, definition);
-
 			var termValue = GetTerm(definition, culture).OriginalValue;
 
 			// TODO: be cleverer, doesnt account for escaping

@@ -20,8 +20,6 @@ namespace Blurb.Core.Generation.Javascript
 				JsGenerationHelper.GenerateTermDeclaration_Method(builder, this.settings, fullClassName, definition, culture);
 			else
 				JsGenerationHelper.GenerateTermDeclaration_Property(builder, this.settings, fullClassName, definition, definition.Key, culture);
-			
 		}
-
 	}
 }
