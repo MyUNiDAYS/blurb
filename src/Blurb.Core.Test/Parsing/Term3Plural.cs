@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.IO;
 using System.Linq;
 using Blurb.Core.Parsing;
 using Xunit;
@@ -11,28 +10,14 @@ namespace Blurb.Core.Test.Parsing
 		[Fact]
 		public void ShouldParseInputProperly()
 		{
-			var stream = this.GetType().Assembly.GetManifestResourceStream("Blurb.Core.Test.Parsing.input.json");
-			TermCollection termCollection;
-			using (var reader = new StreamReader(stream))
-			{
-				var json = reader.ReadToEnd();
-				var parser = new Parser();
-				termCollection = parser.Parse(json);
-			}
+			TestTerms.Terms.Namspace.ShouldEqual("Blurb.Core.Test.Parsing");
+			TestTerms.Terms.ClassName.ShouldEqual("Input");
 
-			termCollection.Namspace.ShouldEqual("Blurb.Core.Test.Parsing");
-			termCollection.ClassName.ShouldEqual("Input");
-
-			var termsArray = termCollection.Terms.ToArray();
+			var term = TestTerms.Terms.Terms.Single(t => t.Key == "Plural") as PluralTermDefinition;
 			
-			// TERM 3
-
-			var term3 = termsArray[3] as PluralTermDefinition;
-			term3.Key.ShouldEqual("Plural");
-			
-			term3.PluralParameterName.ShouldEqual("years");
-			term3.Pluralities[Plurality.One].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("I will be {years} year old on {birthday:dd/MM/yyyy}");
-			term3.Pluralities[Plurality.Other].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("I will be {years} years old on {birthday:dd/MM/yyyy}");
+			term.PluralParameterName.ShouldEqual("years");
+			term.Pluralities[Plurality.One].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("I will be {years} year old on {birthday:dd/MM/yyyy}");
+			term.Pluralities[Plurality.Other].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("I will be {years} years old on {birthday:dd/MM/yyyy}");
 		}
 	}
 }

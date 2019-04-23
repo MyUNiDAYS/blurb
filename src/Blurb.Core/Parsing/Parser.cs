@@ -53,6 +53,8 @@ namespace Blurb.Core.Parsing
 				.Select(v => v.Substring(v.LastIndexOf('.') + 1))
 				.All(v => pluralityNames.Contains(v, StringComparer.InvariantCultureIgnoreCase));
 
+			var pluralParameterName = variations.First().Substring(0, variations.First().LastIndexOf('.'));
+
 			if (plural)
 			{
 				var termDefs = variations.Select(v => new
@@ -70,11 +72,19 @@ namespace Blurb.Core.Parsing
 					}
 				}).ToDictionary(x => x.plurality, x => x.term);
 
+				foreach (var simpleTermDefinition in termDefs)
+				{
+					foreach (var termParameter in simpleTermDefinition.Value.AllParameters.Where(p => p.Name == pluralParameterName))
+					{
+						termParameter.Type = "decimal";
+					}
+				}
+
 				return new PluralTermDefinition
 				{
 					Key = key,
 					Pluralities = termDefs,
-					PluralParameterName = variations.First().Substring(0, variations.First().LastIndexOf('.'))
+					PluralParameterName = pluralParameterName
 				};
 			}
 			else
@@ -94,12 +104,12 @@ namespace Blurb.Core.Parsing
 					}
 				}).ToDictionary(x => x.enumName, x => x.term);
 
-				var enumType = variations.First().Substring(0, variations.First().LastIndexOf('.'));
+				var enumType = pluralParameterName;
 
 				var lastIndexOf = enumType.LastIndexOf('.');
 				string name;
 				if (lastIndexOf > -1)
-					name = enumType.Substring(0, lastIndexOf);
+					name = enumType.Substring(lastIndexOf + 1);
 				else
 					name = enumType;
 

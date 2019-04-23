@@ -10,9 +10,8 @@ namespace Blurb.Core.Test.Generation.Javascript
 		readonly string javascript;
 		readonly IReactEnvironment reactEnvironment;
 
-		public JsExecutor(string javascript)
+		static JsExecutor()
 		{
-			this.javascript = javascript;
 			Initializer.Initialize(r => r.AsSingleton());
 
 			var container = AssemblyRegistration.Container;
@@ -22,15 +21,18 @@ namespace Blurb.Core.Test.Generation.Javascript
 
 			JsEngineSwitcher.Current.DefaultEngineName = MsieJsEngine.EngineName;
 			JsEngineSwitcher.Current.EngineFactories.AddMsie();
+		}
 
+		public JsExecutor(string javascript)
+		{
+			this.javascript = javascript;
 			this.reactEnvironment = ReactEnvironment.Current;
-
 			this.reactEnvironment.Configuration.BabelConfig.Presets.Remove("react");
 		}
 
 		public string GetTerm(string key, params object[] args)
 		{
-			if (args != null)
+			if (args != null && args.Length > 0)
 			{
 				var jsonArray = JsonConvert.SerializeObject(args);
 

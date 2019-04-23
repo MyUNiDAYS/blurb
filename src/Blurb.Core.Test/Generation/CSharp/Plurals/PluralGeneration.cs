@@ -1,73 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using Blurb.Core.Parsing;
 
 namespace Blurb.Core.Test.Generation.CSharp.Plurals
 {
 	public class PluralGeneration : CompiledSpec
 	{
-		public override TermCollection Collection => new TermCollection
-		{
-			Namspace = this.GetType().Namespace,
-			ClassName = this.GetType().Name,
-			Terms = new[]
-			{
-				new PluralTermDefinition
-				{
-					Key = "PluralDays",
-					PluralParameterName = "days",
-					Pluralities = new Dictionary<Plurality, SimpleTermDefinition>
-					{
-						{
-							Plurality.One, new SimpleTermDefinition
-							{
-								Key = "PluralDays.One",
-								Translations = new Dictionary<CultureInfo, TermValue>
-								{
-									{
-										new CultureInfo("en"),
-										new TermValue
-										{
-											OriginalValue = "{days} day",
-											Value = "{0} day",
-											Parameters = new[] {new TermParameter {Name = "days", Type = "decimal"}}
-										}
-									}
-								}
-							}
-						},
-						{
-							Plurality.Other, new SimpleTermDefinition
-							{
-								Key = "PluralDays.Other",
-								Translations = new Dictionary<CultureInfo, TermValue>
-								{
-									{
-										new CultureInfo("en"),
-										new TermValue
-										{
-											OriginalValue = "{days} days",
-											Value = "{0} days",
-											Parameters = new[] {new TermParameter {Name = "days", Type = "decimal" } }
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		};
-
 		public override void Assertions()
 		{
-			var termOne = GetParameterisedTerm("PluralDays", 1m);
-			termOne.Key.ShouldEqual("PluralDays");
-			termOne.ToString(new CultureInfo("en")).ShouldEqual("1 day");
+			var termOne = GetParameterisedTerm("Plural", 1m, new DateTime(2019, 4, 22, 13, 33, 30, DateTimeKind.Utc));
+			termOne.Key.ShouldEqual("Plural");
+			termOne.ToString(new CultureInfo("en")).ShouldEqual("I will be 1 year old on 22/04/2019");
 
-			var termMany = GetParameterisedTerm("PluralDays", 10m);
-			termMany.Key.ShouldEqual("PluralDays");
-			termMany.ToString(new CultureInfo("en")).ShouldEqual("10 days");
+			var termMany = GetParameterisedTerm("Plural", 10m, new DateTime(2019, 4, 22, 13, 33, 30, DateTimeKind.Utc));
+			termMany.Key.ShouldEqual("Plural");
+			termMany.ToString(new CultureInfo("en")).ShouldEqual("I will be 10 years old on 22/04/2019");
 		}
 	}
 }

@@ -10,16 +10,20 @@ namespace Blurb.Core.Parsing
 
 		public static TermValue Parse(string value)
 		{
-			var builder = new StringBuilder(value);
+			var csharpStringFormatBuilder = new StringBuilder(value);
+			var jsTemplateBuilder = new StringBuilder(value);
 
 			var matches = parameterRegex.Matches(value);
 
 			if (matches.Count == 0)
+			{
 				return new TermValue
 				{
-					Value = value,
-					OriginalValue = value
+					CSharpStringFormatValue = value,
+					OriginalValue = value,
+					JsTemplateValue = value
 				};
+			}
 
 			var parameters = new TermParameter[matches.Count];
 			for (var i = matches.Count - 1; i >= 0; i--)
@@ -34,29 +38,34 @@ namespace Blurb.Core.Parsing
 					if (val.StartsWith(":"))
 					{
 						format = val.TrimStart(':');
+						jsTemplateBuilder.Remove(matches[i].Groups[3].Index, matches[i].Groups[3].Length);
 					}
 					else
 					{
 						type = val.TrimStart('#');
 
 						// remove Type
-						builder.Remove(matches[i].Groups[3].Index, matches[i].Groups[3].Length);
+						csharpStringFormatBuilder.Remove(matches[i].Groups[3].Index, matches[i].Groups[3].Length);
+						jsTemplateBuilder.Remove(matches[i].Groups[3].Index, matches[i].Groups[3].Length);
 					}
 				}
 
 				if (matches[i].Groups[2].Success)
 				{
 					var val = matches[i].Groups[2].Value;
+
 					if (val.StartsWith(":"))
 					{
 						format = val.TrimStart(':');
+						jsTemplateBuilder.Remove(matches[i].Groups[2].Index, matches[i].Groups[2].Length);
 					}
 					else
 					{
 						type = val.TrimStart('#');
 
 						// remove Type
-						builder.Remove(matches[i].Groups[2].Index, matches[i].Groups[2].Length);
+						csharpStringFormatBuilder.Remove(matches[i].Groups[2].Index, matches[i].Groups[2].Length);
+						jsTemplateBuilder.Remove(matches[i].Groups[2].Index, matches[i].Groups[2].Length);
 					}
 				}
 
@@ -69,14 +78,15 @@ namespace Blurb.Core.Parsing
 				};
 
 				// replace arg name with index
-				builder.Remove(matches[i].Groups[1].Index, matches[i].Groups[1].Length);
-				builder.Insert(matches[i].Groups[1].Index, i.ToString());
+				csharpStringFormatBuilder.Remove(matches[i].Groups[1].Index, matches[i].Groups[1].Length);
+				csharpStringFormatBuilder.Insert(matches[i].Groups[1].Index, i.ToString());
 			}
 
 			return new TermValue
 			{
 				OriginalValue = value,
-				Value = builder.ToString(),
+				CSharpStringFormatValue = csharpStringFormatBuilder.ToString(),
+				JsTemplateValue = jsTemplateBuilder.ToString(),
 				Parameters = parameters
 			};
 		}

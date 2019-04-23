@@ -11,7 +11,6 @@ namespace Blurb.Core.Test.Generation.CSharp
 	{
 		Assembly assembly;
 		Type testTerm;
-		public abstract TermCollection Collection { get; }
 
 		[Fact]
 		public void ShouldCompileProperly()
@@ -22,7 +21,7 @@ namespace Blurb.Core.Test.Generation.CSharp
 
 			var simpleTermDefinitionCSharpGenerator = new SimpleTermDefinitionCSharpGenerator(cultureSettings);
 			var generator = new CSharpGenerator(new ITermCSharpGenerator[]{ simpleTermDefinitionCSharpGenerator, new PluralTermDefinitionCSharpGenerator(cultureSettings), new ComplexTermDefinitionCSharpGenerator(cultureSettings) });
-			var generated = generator.Generate(this.Collection);
+			var generated = generator.Generate(TestTerms.Terms);
 
 			assembly = new Compiler().CompileCSharp(@"
 using System.Collections.Generic;

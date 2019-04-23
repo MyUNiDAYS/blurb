@@ -1,34 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using Blurb.Core.Parsing;
+﻿using System.Globalization;
 
 namespace Blurb.Core.Test.Generation.CSharp.Simple
 {
 	public class SimpleStaticGeneration : CompiledSpec
 	{
-		public override TermCollection Collection => new TermCollection
-		{
-			Namspace = this.GetType().Namespace,
-			ClassName = this.GetType().Name,
-			Terms = new[]
-			{
-				new SimpleTermDefinition
-				{
-					Key = "SimpleStatic",
-					Translations = new Dictionary<CultureInfo, TermValue>
-					{
-						{new CultureInfo("en"), new TermValue {Value = "I am simple"}}
-					}
-				}
-			}
-		};
-
 		public override void Assertions()
 		{
-			var staticTerm = GetStaticTerm("SimpleStatic");
+			var staticTerm = this.GetStaticTerm("SimpleStatic");
 
 			staticTerm.Key.ShouldEqual("SimpleStatic");
-			staticTerm.ToString(new CultureInfo("en")).ShouldEqual("I am simple");
+			staticTerm.ToString(new CultureInfo("en")).ShouldEqual("I am simple and {escaped}");
 		}
 	}
 }

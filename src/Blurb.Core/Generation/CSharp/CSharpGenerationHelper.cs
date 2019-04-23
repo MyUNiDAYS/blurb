@@ -27,7 +27,7 @@ namespace Blurb.Core.Generation.CSharp
 			}
 
 			builder.Append($@"static readonly Term {termKey} = ");
-			RenderTermCultureSwitch_CSharp(builder, settings, fullClassName, definition);
+			RenderTermCultureSwitch_CSharp(builder, settings, definition, @public);
 			builder.AppendLine(";");
 		}
 
@@ -57,7 +57,7 @@ namespace Blurb.Core.Generation.CSharp
 			builder
 				.AppendLine(")")
 				.AppendLine("		{")
-				.Append("			return new ParameterisedTerm(this._")
+				.Append("			return new ParameterisedTerm(_")
 				.Append(definition.Key)
 				.Append(", ");
 
@@ -74,8 +74,11 @@ namespace Blurb.Core.Generation.CSharp
 				.AppendLine("		}");
 		}
 
-		public static void RenderTermCultureSwitch_CSharp(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition)
+		public static void RenderTermCultureSwitch_CSharp(StringBuilder builder, CultureSettings settings, SimpleTermDefinition definition, bool escaped)
 		{
+			if (escaped)
+				builder.Append("new EscapedTerm(");
+
 			builder.Append($@"new StaticTerm(""{definition.Key}"", new Dictionary<string, string> {{ ");
 
 			var cases = new List<string>();
@@ -86,12 +89,8 @@ namespace Blurb.Core.Generation.CSharp
 
 				var termValue = GetTerm(definition, culture);
 
-				var termText = termValue.Value;
-				//
-				//				// TODO: should this live in GetTerm()?
-				//				if (!hasParameters)
-				//					termValue = termValue.Replace("{{", "{").Replace("}}", "}");
-
+				var termText = termValue.CSharpStringFormatValue;
+				
 				builder
 					.Append("{ \"")
 					.Append(culture.Name.ToLowerInvariant())
@@ -104,6 +103,9 @@ namespace Blurb.Core.Generation.CSharp
 			}
 
 			builder.Append("})");
+
+			if (escaped)
+				builder.Append(")");
 		}
 
 		public static TermValue GetTerm(SimpleTermDefinition definition, CultureInfo CultureInfo)

@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.IO;
 using System.Linq;
 using Blurb.Core.Parsing;
 using Xunit;
@@ -11,32 +10,18 @@ namespace Blurb.Core.Test.Parsing
 		[Fact]
 		public void ShouldParseInputProperly()
 		{
-			var stream = this.GetType().Assembly.GetManifestResourceStream("Blurb.Core.Test.Parsing.input.json");
-			TermCollection termCollection;
-			using (var reader = new StreamReader(stream))
-			{
-				var json = reader.ReadToEnd();
-				var parser = new Parser();
-				termCollection = parser.Parse(json);
-			}
-
-			termCollection.Namspace.ShouldEqual("Blurb.Core.Test.Parsing");
-			termCollection.ClassName.ShouldEqual("Input");
-
-			var termsArray = termCollection.Terms.ToArray();
+			TestTerms.Terms.Namspace.ShouldEqual("Blurb.Core.Test.Parsing");
+			TestTerms.Terms.ClassName.ShouldEqual("Input");
 			
-			// TERM 2
-
-			var term2 = termsArray[2] as ComplexTermDefinition;
-			term2.Key.ShouldEqual("ContentDependent");
+			var term = TestTerms.Terms.Terms.Single(t => t.Key == "ContentDependent") as ComplexTermDefinition;
 			
-			term2.ComplexParameter.Name.ShouldEqual("anEnum");
-			term2.ComplexParameter.Type.ShouldEqual("AnEnum");
-			term2.ComplexParameter.Format.ShouldBeNull();
-			term2.ComplexParameter.Index.ShouldEqual(0);
+			term.ComplexParameter.Name.ShouldEqual("aBMode");
+			term.ComplexParameter.Type.ShouldEqual("Blurb.Core.Test.ABMode");
+			term.ComplexParameter.Format.ShouldBeNull();
+			term.ComplexParameter.Index.ShouldEqual(0);
 
-			term2.Complexities["AnEnum.Foo"].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("This is Foo content");
-			term2.Complexities["AnEnum.Bar"].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("This is Bar content");
+			term.Complexities["Blurb.Core.Test.ABMode.A"].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("This is A content {arg}");
+			term.Complexities["Blurb.Core.Test.ABMode.B"].Translations[new CultureInfo("en")].OriginalValue.ShouldEqual("This is B content {arg}");
 		}
 	}
 }

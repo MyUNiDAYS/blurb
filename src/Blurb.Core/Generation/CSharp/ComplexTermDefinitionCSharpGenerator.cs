@@ -40,11 +40,16 @@ namespace Blurb.Core.Generation.CSharp
 					case {complexity.Key}:
 						return _{definition.Key}_{complexity.Key.Replace('.', '_')};");
 			}
-			builder.AppendLine($@"
+			builder.Append($@"
 				}}
 
 				return new EmptyTerm();
-			}}), {string.Join(", ", definition.AllParameters.Skip(1).Select(p => p.Name))});
+			}})");
+
+			if (definition.AllParameters.Count > 1)
+				builder.Append($", {string.Join(", ", definition.AllParameters.Skip(1).Select(p => p.Name))}");
+
+			builder.AppendLine($@");
 		}}");
 		}
 	}

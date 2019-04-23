@@ -1,4 +1,4 @@
-﻿namespace Blurb.Core.Test.Generation
+﻿namespace Blurb.Core.Test
 {
 	public enum ABMode
 	{

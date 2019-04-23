@@ -1,22 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using Blurb.Core.Generation.CSharp;
-using Xunit;
 
 namespace Blurb.Core.Test.Generation.CSharp.Simple
 {
-	public class SimpleDynamicGeneration
+	public class SimpleDynamicGeneration : CompiledSpec
 	{
-		[Fact]
-		public void ShouldGenerateCorrectCSharp()
-		{
-			var cultureEn = new CultureInfo("en");
-			var collection = TestTerms.SimpleDynamic;
 
-			var supportedCultures = new[] { cultureEn };
-			var cultureSettings = new CultureSettings { SupportedCultures = supportedCultures, DefaultCulture = cultureEn };
-			var generator = new CSharpGenerator(new ITermCSharpGenerator[] { new SimpleTermDefinitionCSharpGenerator(cultureSettings) });
-			var generate = generator.Generate(collection);
+		public override void Assertions()
+		{
+			var staticTerm = this.GetParameterisedTerm("SimpleDynamic", 21);
+
+			staticTerm.Key.ShouldEqual("SimpleDynamic");
+			staticTerm.ToString(new CultureInfo("en")).ShouldEqual("I am 21 and {escaped}");
 		}
 	}
 }

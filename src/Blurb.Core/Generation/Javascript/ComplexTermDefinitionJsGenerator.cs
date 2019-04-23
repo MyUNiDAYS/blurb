@@ -7,13 +7,6 @@ namespace Blurb.Core.Generation.Javascript
 {
 	sealed class ComplexTermDefinitionJsGenerator : BaseTermJsGenerator<ComplexTermDefinition>
 	{
-		readonly CultureSettings settings;
-
-		public ComplexTermDefinitionJsGenerator(CultureSettings settings)
-		{
-			this.settings = settings;
-		}
-		
 		public override void Generate(StringBuilder builder, string fullClassName, ComplexTermDefinition definition, CultureInfo culture)
 		{
 			builder.AppendLine($@"{definition.Key} ({string.Join(", ", definition.AllParameters.Select(p => p.Name))}) {{

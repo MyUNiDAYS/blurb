@@ -1,28 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Blurb.Core.Parsing;
 
 namespace Blurb.Core.Generation.Javascript
 {
 	static class JsGenerationHelper
 	{
-		public static void GenerateTermDeclaration_Property(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition, string termKey, CultureInfo culture)
+
+		static readonly Regex parameterRegex = new Regex(@"(?<!{){([^{}]+)}", RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+		static readonly Regex escapedRegex = new Regex(@"{{([^}]+)}}", RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+
+
+		public static void GenerateTermDeclaration_Property(StringBuilder builder, SimpleTermDefinition definition, string termKey, CultureInfo culture)
 		{
+			var termValue = GetTerm(definition, culture).JsTemplateValue;
+
+			termValue = escapedRegex.Replace(termValue, "{$1}");
+
 			builder.AppendLine($@"
 get {termKey}() {{
-	return '{GetTerm(definition, culture).Value.Replace("'", "\\'")}';
+	return `{termValue.Replace("`", "\\`")}`;
 }}");
-			
 		}
 
-		public static void GenerateTermDeclaration_Method(StringBuilder builder, CultureSettings settings, string fullClassName, SimpleTermDefinition definition, CultureInfo culture)
+		public static void GenerateTermDeclaration_Method(StringBuilder builder, SimpleTermDefinition definition, CultureInfo culture)
 		{
-			var termValue = GetTerm(definition, culture).OriginalValue;
+			var termValue = GetTerm(definition, culture).JsTemplateValue;
 
-			// TODO: be cleverer, doesnt account for escaping
-			termValue = termValue.Replace("{", "${");
+			termValue = parameterRegex.Replace(termValue, "${$1}");
+			termValue = escapedRegex.Replace(termValue, "{$1}");
 
 			builder.AppendLine($@"{definition.Key} ({string.Join(", ", definition.AllParameters.Select(p => p.Name))}) {{
 return `{termValue.Replace("`", "\\`")}`;
